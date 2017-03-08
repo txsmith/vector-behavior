@@ -112,20 +112,24 @@ var VectorBehavior = (() => {
     return {x: -1, y: 0};
   }
 
-
+  /**
+   * Attempt to convert an event or bounding rectangle to a vector.
+   */
+  const toVector = (rect, xField, yField) => {
+    if (xField && yField) {
+      return {x: rect[xField], y: rect[yField]};
+    } else if (rect.left !== undefined && rect.top !== undefined) {
+      return {x: rect.left, y: rect.top};
+    } else if (rect.x !== undefined && rect.y !== undefined) {
+      return {x: rect.x, y: rect.y};
+    } else if (rect.clientX !== undefined && rect.clientY !== undefined) {
+      return {x: rect.clientX, y: rect.clientY};
+    }
+  }
 
   // Exports
   return {
-    toVector: (rect, xField, yField) => {
-      if (xField && yField) {
-        return {x: rect[xField], y: rect[yField]};
-      } else if (rect.left !== undefined && rect.top !== undefined) {
-        return {x: rect.left, y: rect.top};
-      } else if (rect.clientX !== undefined && rect.clientY !== undefined) {
-        return {x: rect.clientX, y: rect.clientY};
-      }
-    },
-
+    toVector: toVector,
     vector: vector,
     nullVector: nullVector,
     unitVector: unitVector,
