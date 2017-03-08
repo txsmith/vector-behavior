@@ -1,0 +1,17 @@
+{
+  "name": "vector-behavior",
+  "version": "0.0.1",
+  "private": true,
+  "main": "vector-behavior.html",
+  "repository": "https://github.com/txsmith/vector-behavior",
+  "author": "Thomas Smith <tnsmith@live.nl>",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "eslint-plugin-html": "^1.5.5",
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-eslint": "^3.0.1"
+  },
+  "scripts": {
+    "lint": "gulp lint"
+  }
+}
