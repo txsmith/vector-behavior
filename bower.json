@@ -19,9 +19,7 @@
   },
   "devDependencies": {
     "web-component-tester": "^5.0.0",
-    "webcomponentsjs": "^0.7.24",
-    "test-fixture": "^1.0.0",
-    "iron-test-helpers": "txsmith/iron-test-helpers#master"
+    "webcomponentsjs": "^0.7.24"
   },
   "keywords": [
     "web-components",

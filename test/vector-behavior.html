@@ -1,0 +1,106 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2017 Thomas Smith. All rights reserved.
+This code may only be used under the BSD style license found in LICENSE.txt
+-->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>drag-element tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../vector-behavior.html">
+</head>
+<body>
+  <script>
+  const V = VectorBehavior;
+
+  const v1 = V.vector(42, 32);
+  const v2 = V.vector(8, 64);
+  const v3 = V.vector(3, 16);
+  const v4 = V.vector(7, 128);
+  
+  describe('Vector constants', () => {
+    it('should have the correct null vector', () =>
+      expect(V.nullVector).to.deep.equal({x: 0, y:0})
+    );
+
+    it('should have the correct unit vector', () =>
+      expect(V.unitVector).to.deep.equal({x: 1, y: 1})
+    );
+
+    it('should build the correct constant vector', () =>
+      expect(V.constVector(42)).to.deep.equal({x: 42, y: 42})
+    );
+
+    it('should build the correct vector', () =>
+      expect(V.vector(42, 21)).to.deep.equal({x: 42, y: 21})
+    );
+
+    it('should correctly add two vectors', () => {
+      expect(V.add(v1, v2))
+        .to.deep.equal({x: v1.x + v2.x, y: v1.y + v2.y})
+    });
+
+    it('should correctly add four vectors', () => {
+      expect(V.add(v1, v2, v3, v4))
+        .to.deep.equal({x: v1.x+v2.x+v3.x+v4.x, y: v1.y+v2.y+v3.y+v4.y})
+    });
+
+    it('should correctly subtract two vectors', () => {
+      expect(V.subtract(v1, v2))
+        .to.deep.equal({x: v1.x - v2.x, y: v1.y - v2.y})
+    });
+
+    it('should correctly subtract four vectors', () => {
+      expect(V.subtract(v1, v2, v3, v4))
+        .to.deep.equal({x: v1.x-v2.x-v3.x-v4.x, y: v1.y-v2.y-v3.y-v4.y})
+    });
+
+    it('should correctly multiply two vectors', () => {
+      expect(V.pairwiseMultiply(v1, v2))
+        .to.deep.equal({x: v1.x * v2.x, y: v1.y * v2.y})
+    });
+
+    it('should correctly multiply four vectors', () => {
+      expect(V.pairwiseMultiply(v1, v2, v3, v4))
+        .to.deep.equal({x: v1.x*v2.x*v3.x*v4.x, y: v1.y*v2.y*v3.y*v4.y})
+    });
+
+    it('should scale a vector correctly', () => {
+      expect(V.scale(5, v1))
+        .to.deep.equal({x: 5*v1.x, y: 5*v1.y})
+    });
+
+    it('should negate a vector correctly', () => {
+      expect(V.negate(v1))
+        .to.deep.equal({x: -v1.x, y: -v1.y})
+    });
+
+    it('should correctly compute the absolute', () => {
+      expect(V.abs(V.negate(v1)))
+        .to.deep.equal(v1);
+      expect(V.abs(v1))
+        .to.deep.equal(v1)
+    });
+
+    it('should correctly invert a vector', () => {
+      expect(V.invert(v1))
+        .to.deep.equal({x: v1.y, y: v1.x})
+    });
+    
+    it('should correctly compute the dot product', () => {
+      expect(V.dot(v1, v2))
+        .to.equal(2384)
+    });
+
+    //TODO: test remaining methods
+  });
+
+  </script>
+</body>
+</html>
