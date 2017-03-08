@@ -1,0 +1,128 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2017 Thomas Smith. All rights reserved.
+This code may only be used under the BSD style license found in LICENSE.txt
+-->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ElementVectorBehavior tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../element-vector-behavior.html">
+</head>
+<body>
+  <style>
+        div {
+          position: fixed;
+          left: 45px;
+          top: 42px;
+          width: 80px;
+          height: 25px;
+          background: red;
+        }
+      </style>
+
+  <test-fixture id="basic">
+    <template>
+      <div>
+        Hello World
+      </div>
+    </template>
+  </test-fixture>
+
+  <script>
+  const EV = ElementVectorBehavior;
+  const V = VectorBehavior;
+  
+  describe('ElementVectorBehavior', () => {
+    var el;
+
+    beforeEach(() => {
+       el = fixture('basic');
+    });
+
+    it('should do the correct conversion from box to vector', () => {
+      const box = el.getBoundingClientRect();
+      expect(EV.boxToVector(box))
+        .to.deep.equal(V.vector(box.left)(box.top));
+    });
+
+    it('should get the correct box and element size', () => {
+      const box = el.getBoundingClientRect();
+      expect(EV.boxSize(box))
+        .to.deep.equal(V.vector(box.width)(box.height));
+      
+      expect(EV.elemSize(el))
+        .to.deep.equal(EV.boxSize(box));
+    });
+
+    it('should get the correct box and element top-left', () => {
+      const box = el.getBoundingClientRect();
+      expect(EV.boxTopLeft(box))
+        .to.deep.equal(V.vector(box.left)(box.top));
+      
+      expect(EV.elemTopLeft(el))
+        .to.deep.equal(EV.boxTopLeft(box));
+    });
+
+    it('should get the correct box and element top-right', () => {
+      const box = el.getBoundingClientRect();
+      expect(EV.boxTopRight(box))
+        .to.deep.equal(V.vector(box.left+box.width)(box.top));
+      
+      expect(EV.elemTopRight(el))
+        .to.deep.equal(EV.boxTopRight(box));
+    });
+
+    it('should get the correct box and element bottom-right', () => {
+      const box = el.getBoundingClientRect();
+      expect(EV.boxBottomRight(box))
+        .to.deep.equal(V.vector(box.left+box.width)(box.top+box.height));
+      
+      expect(EV.elemBottomRight(el))
+        .to.deep.equal(EV.boxBottomRight(box));
+    });
+
+    it('should get the correct box and element bottom-left', () => {
+      const box = el.getBoundingClientRect();
+      expect(EV.boxBottomLeft(box))
+        .to.deep.equal(V.vector(box.left)(box.top+box.height));
+      
+      expect(EV.elemBottomLeft(el))
+        .to.deep.equal(EV.boxBottomLeft(box));
+    });
+
+    it('should get the correct center', () => {
+      const box = el.getBoundingClientRect();
+      expect(EV.boxCenter(box))
+        .to.deep.equal(V.vector(box.left+0.5*box.width)(box.top+0.5*box.height));
+      
+      expect(EV.elemCenter(el))
+        .to.deep.equal(EV.boxCenter(box));
+    });
+
+    it('should get the correct side points', () => {
+      const box = el.getBoundingClientRect();
+
+      const sides = [
+        /*North*/ V.vector(box.left + 0.5*box.width)(box.top),
+        /*East*/ V.vector(box.left + box.width)(box.top + 0.5*box.height),
+        /*South*/ V.vector(box.left + 0.5*box.width)(box.top + box.height),
+        /*West*/ V.vector(box.left)(box.top + 0.5*box.height),
+      ];
+
+      expect(EV.boxSidePoints(box)).to.deep.equal(sides)
+      expect(EV.elemSidePoints(el)).to.deep.equal(EV.boxSidePoints(box));
+    });
+
+    //TODO: test remaining methods
+  });
+
+  </script>
+</body>
+</html>

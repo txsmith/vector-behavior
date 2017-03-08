@@ -22,9 +22,9 @@ var VectorBehavior = (() => {
     };
   };
 
-  const vector = (x, y) => ({x: x, y: y});
+  const vector = x => y => ({x: x, y: y});
 
-  const map = (v, f) => ({x: f(v.x), y: f(v.y)});
+  const map = f => v => ({x: f(v.x), y: f(v.y)});
 
   const reduce = f => (...args) => args.reduce((a, b) => joinAll(a, b, f));
   
@@ -40,15 +40,25 @@ var VectorBehavior = (() => {
 
   const pairwiseMultiply = reduce((a, b) => a*b);
 
-  const scale = (s, v) => map(v, a => s*a);
+  const scale = s => map(a => s*a);
 
   const negate = v => subtract(nullVector, v);
 
-  const abs = v => map(v, a => Math.abs(a));
+  const abs = map(Math.abs);
 
   const invert = v => ({x: v.y, y: v.x});
 
-  const dot = (v1, v2) => v1.x*v2.x + v1.y*v2.y;
+  const dot = v1 => v2 => v1.x*v2.x + v1.y*v2.y;
+
+  /**
+   * Euclidian distance measurement
+   */
+  const distance = v1 => v2 => {
+    const d = squareDifference(v1)(v2);
+    return Math.sqrt(d.x + d.y)
+  }
+
+  const squareDifference = v1 => v2 => map(a => a*a)(subtract(v1, v2));
 
   const clip = (v, northWest, southEast) => 
     joinAll(v, northWest, southEast, (toClip, minimum, maximum) => 
@@ -112,24 +122,10 @@ var VectorBehavior = (() => {
     return {x: -1, y: 0};
   }
 
-  /**
-   * Attempt to convert an event or bounding rectangle to a vector.
-   */
-  const toVector = (rect, xField, yField) => {
-    if (xField && yField) {
-      return {x: rect[xField], y: rect[yField]};
-    } else if (rect.left !== undefined && rect.top !== undefined) {
-      return {x: rect.left, y: rect.top};
-    } else if (rect.x !== undefined && rect.y !== undefined) {
-      return {x: rect.x, y: rect.y};
-    } else if (rect.clientX !== undefined && rect.clientY !== undefined) {
-      return {x: rect.clientX, y: rect.clientY};
-    }
-  }
+  
 
   // Exports
   return {
-    toVector: toVector,
     vector: vector,
     nullVector: nullVector,
     unitVector: unitVector,
@@ -137,6 +133,8 @@ var VectorBehavior = (() => {
     add: add,
     subtract: subtract,
     pairwiseMultiply: pairwiseMultiply,
+    squareDifference: squareDifference,
+    distance: distance,
     scale: scale,
     negate: negate,
     abs: abs,

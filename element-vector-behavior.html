@@ -1,0 +1,94 @@
+<!--
+@license
+Copyright (c) 2017 Thomas Smith. All rights reserved.
+This code may only be used under the BSD style license found in LICENSE.txt
+-->
+<link rel="import" href="vector-behavior.html">
+
+<script>
+/*exported ElementVectorBehavior*/
+/**
+ * Behavior for extracting vectors from DOM elements.
+ * @polymerBehavior
+ */
+var ElementVectorBehavior = (() => {
+
+  const V = VectorBehavior;
+
+  /**
+   * Attempt to convert an event or bounding rectangle to a vector.
+   */
+  const boxToVector = (rect, xField, yField) => {
+    if (xField && yField) {
+      return {x: rect[xField], y: rect[yField]};
+    } else if (rect.left !== undefined && rect.top !== undefined) {
+      return {x: rect.left, y: rect.top};
+    } else if (rect.x !== undefined && rect.y !== undefined) {
+      return {x: rect.x, y: rect.y};
+    } else if (rect.clientX !== undefined && rect.clientY !== undefined) {
+      return {x: rect.clientX, y: rect.clientY};
+    }
+  }
+
+  const boxSize = box => boxToVector(box, 'width', 'height');
+
+  const boxTopLeft = boxToVector;
+
+  const boxTopRight = box => {
+    const boxPos = boxTopLeft(box);
+    const size = boxSize(box);
+    return V.vector(boxPos.x + size.x)(boxPos.y);
+  };
+
+  const boxBottomRight = box => V.add(boxTopLeft(box), boxSize(box));
+
+  const boxBottomLeft = box => {
+    const boxPos = boxTopLeft(box);
+    const size = boxSize(box);
+    return V.vector(boxPos.x)(boxPos.y + size.y);
+  };
+
+  const boxCenter = box => 
+    V.vector(box.left + 0.5*box.width)(box.top + 0.5*box.height);
+  
+  const boxSidePoints = box => [
+    V.vector(box.left + 0.5*box.width)(box.top),                  // North
+    V.vector(box.left + box.width    )(box.top + 0.5*box.height), // East
+    V.vector(box.left + 0.5*box.width)(box.top + box.height),     // South
+    V.vector(box.left                )(box.top + 0.5*box.height)  // West
+  ];
+
+  const elemSize = el => boxSize(el.getBoundingClientRect());
+
+  const elemTopLeft = el => boxTopLeft(el.getBoundingClientRect());
+
+  const elemTopRight = el => boxTopRight(el.getBoundingClientRect());
+
+  const elemBottomRight = el => boxBottomRight(el.getBoundingClientRect());
+
+  const elemBottomLeft = el => boxBottomLeft(el.getBoundingClientRect());
+
+  const elemCenter = el => boxCenter(el.getBoundingClientRect());
+
+  const elemSidePoints = el => boxSidePoints(el.getBoundingClientRect());
+
+  // Exports
+  return {
+    boxToVector: boxToVector,
+    boxSize: boxSize,
+    boxTopLeft: boxTopLeft,
+    boxTopRight: boxTopRight,
+    boxBottomRight: boxBottomRight,
+    boxBottomLeft: boxBottomLeft,
+    boxCenter: boxCenter,
+    boxSidePoints: boxSidePoints,
+    elemSize: elemSize,
+    elemTopLeft: elemTopLeft,
+    elemTopRight: elemTopRight,
+    elemBottomRight: elemBottomRight,
+    elemBottomLeft: elemBottomLeft,
+    elemCenter: elemCenter,
+    elemSidePoints: elemSidePoints
+  };
+})();
+</script>

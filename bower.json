@@ -19,7 +19,8 @@
   },
   "devDependencies": {
     "web-component-tester": "^5.0.0",
-    "webcomponentsjs": "^0.7.24"
+    "webcomponentsjs": "^0.7.24",
+    "test-fixture": "^2.0.1"
   },
   "keywords": [
     "web-components",
@@ -27,5 +28,8 @@
     "polymer",
     "vector",
     "behavior"
-  ]
+  ],
+  "resolutions": {
+    "test-fixture": "^2.0.1"
+  }
 }

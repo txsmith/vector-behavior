@@ -19,12 +19,12 @@ This code may only be used under the BSD style license found in LICENSE.txt
   <script>
   const V = VectorBehavior;
 
-  const v1 = V.vector(42, 32);
-  const v2 = V.vector(8, 64);
-  const v3 = V.vector(3, 16);
-  const v4 = V.vector(7, 128);
+  const v1 = V.vector(42)(32);
+  const v2 = V.vector(8)(64);
+  const v3 = V.vector(3)(16);
+  const v4 = V.vector(7)(128);
   
-  describe('Vector constants', () => {
+  describe('VectorBehavior', () => {
     it('should have the correct null vector', () =>
       expect(V.nullVector).to.deep.equal({x: 0, y:0})
     );
@@ -38,7 +38,7 @@ This code may only be used under the BSD style license found in LICENSE.txt
     );
 
     it('should build the correct vector', () =>
-      expect(V.vector(42, 21)).to.deep.equal({x: 42, y: 21})
+      expect(V.vector(42)(21)).to.deep.equal({x: 42, y: 21})
     );
 
     it('should correctly add two vectors', () => {
@@ -72,7 +72,7 @@ This code may only be used under the BSD style license found in LICENSE.txt
     });
 
     it('should scale a vector correctly', () => {
-      expect(V.scale(5, v1))
+      expect(V.scale(5)(v1))
         .to.deep.equal({x: 5*v1.x, y: 5*v1.y})
     });
 
@@ -94,8 +94,18 @@ This code may only be used under the BSD style license found in LICENSE.txt
     });
     
     it('should correctly compute the dot product', () => {
-      expect(V.dot(v1, v2))
+      expect(V.dot(v1)(v2))
         .to.equal(2384)
+    });
+
+    it('should correctly compute the square delta of two vectors', () => {
+      expect(V.squareDifference(v1)(v2))
+        .to.deep.equal({x: (v1.x-v2.x)*(v1.x-v2.x), y: (v1.y-v2.y)*(v1.y-v2.y)})
+    });
+
+    it('should correctly compute the euclidian distance between two vectors', () => {
+      expect(V.distance(v1)(v2))
+        .to.equal(2*Math.sqrt(545))
     });
 
     //TODO: test remaining methods
