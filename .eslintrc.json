@@ -27,13 +27,10 @@
   ],
   "globals": {
     "Polymer": false,
-    "MockInteractions": false,
     "fixture": false,
-    "flush": false,
     "describe": false,
     "it": false,
     "beforeEach": false,
-    "expect": false,
     "WCT": false
   }
 }

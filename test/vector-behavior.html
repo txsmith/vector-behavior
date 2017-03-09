@@ -29,8 +29,8 @@ This code may only be used under the BSD style license found in LICENSE.txt
       expect(V.nullVector).to.deep.equal({x: 0, y:0})
     );
 
-    it('should have the correct unit vector', () =>
-      expect(V.unitVector).to.deep.equal({x: 1, y: 1})
+    it('should correctly unitize a vector', () =>
+      expect(V.unit(v1)).to.deep.equal({x: 1, y: 1}) // FIXME
     );
 
     it('should build the correct constant vector', () =>
@@ -106,6 +106,11 @@ This code may only be used under the BSD style license found in LICENSE.txt
     it('should correctly compute the euclidian distance between two vectors', () => {
       expect(V.distance(v1)(v2))
         .to.equal(2*Math.sqrt(545))
+    });
+
+    it('should correctly compute the squared euclidian distance between two vectors', () => {
+      expect(V.fastDistance(v1)(v2))
+        .to.equal(4*545)
     });
 
     //TODO: test remaining methods
