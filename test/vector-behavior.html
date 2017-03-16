@@ -29,9 +29,11 @@ This code may only be used under the BSD style license found in LICENSE.txt
       expect(V.nullVector).to.deep.equal({x: 0, y:0})
     );
 
-    it('should correctly unitize a vector', () =>
-      expect(V.unit(v1)).to.deep.equal({x: 1, y: 1}) // FIXME
-    );
+    it('should correctly unitize a vector', () => {
+      const longVector = V.vector(42)(42);
+      const unitVector = V.constVector(0.5*Math.sqrt(2));
+      expect(V.unit(longVector)).to.deep.equal(unitVector);
+    });
 
     it('should build the correct constant vector', () =>
       expect(V.constVector(42)).to.deep.equal({x: 42, y: 42})
